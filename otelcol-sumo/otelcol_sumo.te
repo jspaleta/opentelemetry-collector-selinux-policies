@@ -1,0 +1,53 @@
+policy_module(otelcol_sumo, 1.0.0)
+
+########################################
+#
+# Declarations
+#
+
+type otelcol_sumo_t;
+type otelcol_sumo_exec_t;
+init_daemon_domain(otelcol_sumo_t, otelcol_sumo_exec_t)
+
+permissive otelcol_sumo_t;
+
+########################################
+#
+# otelcol_sumo local policy
+#
+allow otelcol_sumo_t self:fifo_file rw_fifo_file_perms;
+allow otelcol_sumo_t self:unix_stream_socket create_stream_socket_perms;
+
+domain_use_interactive_fds(otelcol_sumo_t)
+
+files_read_etc_files(otelcol_sumo_t)
+
+miscfiles_read_localization(otelcol_sumo_t)
+
+# needed for default sumologic.yaml 
+# ref: https://github.com/SumoLogic/sumologic-otel-collector/blob/4c2a039b8ae7b559c82d933331138730cbbc4fee/examples/sumologic.yaml
+allow otelcol_sumo_t proc_t:file { getattr open read };
+auth_read_passwd_file(otelcol_sumo_t)
+corenet_tcp_bind_generic_node(otelcol_sumo_t)
+corenet_tcp_bind_generic_port(otelcol_sumo_t)
+corenet_tcp_connect_soundd_port(otelcol_sumo_t)
+dev_read_sysfs(otelcol_sumo_t)
+fs_search_cgroup_dirs(otelcol_sumo_t)
+gnome_read_generic_cache_files(otelcol_sumo_t)
+kernel_dgram_send(otelcol_sumo_t)
+kernel_read_net_sysctls(otelcol_sumo_t)
+kernel_search_network_sysctl(otelcol_sumo_t)
+logging_create_devlog_dev(otelcol_sumo_t)
+logging_read_syslog_pid(otelcol_sumo_t)
+sysnet_read_config(otelcol_sumo_t)
+userdom_list_user_home_dirs(otelcol_sumo_t)
+
+files_create_var_lib_dirs(otelcol_sumo_t)
+files_manage_var_lib_files(otelcol_sumo_t)
+files_map_var_lib_files(otelcol_sumo_t)
+
+allow otelcol_sumo_t self:tcp_socket { accept bind connect create getattr getopt listen setopt };
+allow otelcol_sumo_t self:udp_socket { connect create getattr setopt };
+allow otelcol_sumo_t self:unix_dgram_socket { connect create getattr };
+
+

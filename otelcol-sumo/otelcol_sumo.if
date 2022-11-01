@@ -1,0 +1,40 @@
+
+## <summary>policy for otelcol_sumo</summary>
+
+########################################
+## <summary>
+##	Execute otelcol_sumo_exec_t in the otelcol_sumo domain.
+## </summary>
+## <param name="domain">
+## <summary>
+##	Domain allowed to transition.
+## </summary>
+## </param>
+#
+interface(`otelcol_sumo_domtrans',`
+	gen_require(`
+		type otelcol_sumo_t, otelcol_sumo_exec_t;
+	')
+
+	corecmd_search_bin($1)
+	domtrans_pattern($1, otelcol_sumo_exec_t, otelcol_sumo_t)
+')
+
+######################################
+## <summary>
+##	Execute otelcol_sumo in the caller domain.
+## </summary>
+## <param name="domain">
+##	<summary>
+##	Domain allowed access.
+##	</summary>
+## </param>
+#
+interface(`otelcol_sumo_exec',`
+	gen_require(`
+		type otelcol_sumo_exec_t;
+	')
+
+	corecmd_search_bin($1)
+	can_exec($1, otelcol_sumo_exec_t)
+')
